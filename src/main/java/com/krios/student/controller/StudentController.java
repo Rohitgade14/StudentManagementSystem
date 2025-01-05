@@ -3,6 +3,7 @@ package com.krios.student.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,6 +39,15 @@ public class StudentController {
 		 return new ResponseEntity<>(StudentList,HttpStatus.OK);
 		
 	}
+    @GetMapping ("/page")
+	public ResponseEntity<Page<StudentDto>> getAllStudentByPage(	
+			@RequestParam(defaultValue = "0",required = false) Integer pageNumber,
+			@RequestParam(defaultValue = "5",required = false) Integer pageSize) {
+	
+             Page<StudentDto> studentPage =studentService.getAllStudentByPage(pageNumber, pageSize);
+             return ResponseEntity.status(HttpStatus.OK).body(studentPage);
+	}
+	
 	@GetMapping("/{id}")
     public ResponseEntity<StudentDto> getStudentById(@PathVariable Integer id) {
     	    StudentDto student = this.studentService.getStudentById(id);
@@ -72,15 +82,7 @@ public class StudentController {
 		}
 		
 	}
-	// for pagination
-//	@GetMapping("/page")
-//	public ResponseEntity<List<StudentDto>> getAllStudentByPage(
-//			@RequestParam(defaultValue = "0",required = false) Integer pageNumber,
-//			@RequestParam(value="pagesize",defaultValue = "5",required = false)Integer pageSize)
-//			{
-//		 List<StudentDto> allUsers = studentService.getAllStudentByPage(pageNumber, pageSize);
-//		 return ResponseEntity.status(HttpStatus.OK).body(allUsers);
-//	}
+	
 
 
 }

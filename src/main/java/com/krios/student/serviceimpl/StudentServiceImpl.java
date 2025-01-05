@@ -1,13 +1,14 @@
 package com.krios.student.serviceimpl;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.krios.student.entity.Student;
 import com.krios.student.exception.StudentNotFoundException;
 import com.krios.student.payload.StudentDto;
@@ -68,38 +69,36 @@ public class StudentServiceImpl implements StudentService{
 		
 	}
 	
+	
+	
+	public Page<StudentDto> getAllStudentByPage(Integer pageNumber, Integer pageSize) {
+		    // pageable object get through the pageRequest
+		    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+                      Page<Student> studentPages = studentRepository.findAll(pageable);
+                      // Convert each entity in the page to DTO
+                      
+                      return studentPages.map(student -> modelMapper.map(student, StudentDto.class));
+                 
+	}
+	
 	public Student dtoToStudent(StudentDto studentDto) {
       
 		Student student =this.modelMapper.map(studentDto, Student.class);
 		return student;
-//		student.setName(studentDto.getName());
-//		student.setEmail(studentDto.getEmail());
-//		student.setPassword(studentDto.getPassword());
-//		student.setAbout(studentDto.getAbout());
-	
 	}
 	public StudentDto StudentTodto(Student student) {
 		
 		StudentDto studentDto = this.modelMapper.map(student, StudentDto.class);
-		return studentDto;
-//		StudentDto studentDto = new StudentDto();
-//		studentDto.setId(student.getId());
-//		studentDto.setName(student.getName());
-//		studentDto.setEmail(student.getEmail());
-//		studentDto.setPassword(student.getPassword());
-//		studentDto.setAbout(student.getAbout());
-		
-		
+		return studentDto;	
 	}
 
 
+	
 
 
-//	@Override
-//	public void getAllStudentByPage(Integer pageNumber, Integer pageSize) {
-//		// TODO Auto-generated method stub
-//		
-//	}
+
+
+
 
 
 	
